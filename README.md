@@ -71,6 +71,10 @@ To be determined after the MMCore API is complete. The device API will mostly mi
 
 Storage Device API is not visible to the application (user-client) so we will treat it as an MMCore implementation detail.
 
+## Conceptual Block Diagram
+![image](https://hackmd.io/_uploads/SyMiPQgnp.png)
+
+
 # Discussion
 Nico's comments:
 * The API assumens 6D image model, maybe we should generalize to variable N dimensional model
