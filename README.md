@@ -72,7 +72,7 @@ To be determined after the MMCore API is complete. The device API will mostly mi
 Storage Device API is not visible to the application (user-client) so we will treat it as an MMCore implementation detail.
 
 ## Conceptual Block Diagram
-![image](https://hackmd.io/_uploads/SyMiPQgnp.png)
+![alt text](https://github.com/go2scope/MM-storage-api/blob/main/mm-python-app-2024-02-15-1225.png)
 
 
 # Discussion
