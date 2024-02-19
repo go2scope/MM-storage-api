@@ -21,11 +21,20 @@ bool acqCloseDataset(string handle);
 ```
 After the dataset is closed, we can't add any images to it.
 
-The summaryMetadata argument (JSON) must have all the required parameters for creating the dataset (e.g. dimension extents, channel names)
+The summaryMetadata argument (JSON) must have a minmal set of integer parameters to define dataset:
 
-#### Discussion:
-* We are assuming that summaryMeta input parameter (JSON format) contains necessary information for creating the dataset, e.g. how many channels, channel names, slices, etc.
-* Implicitly that means we know in advance all dimensional aspects of the dataset we are about to acquire
+	WIDTH
+	HEIGHT
+	POSITIONS
+	CHANNELS
+	FRAMES
+	SLICES
+
+Optionally the metadata can contain channel names, position names and any other custom metdata.
+
+#### Note:
+*We require the client to know image physical dimensions and axes extents before starting the acqusition. This might be a challenge for some use cases - see the discussion section at the end.*
+
 
 ### Load Dataset
 This allows us to load an existing dataset and access data through the MMCore API. Loaded datasets are immutable, any attempt to add images will fail. "Loading" the dataset does not mean that it is loaded in program memory - it just means we can gain access to it through the MMCore API.
@@ -57,6 +66,13 @@ Pops the next image from the queue and sends it to the Storage device. Metadata 
 
 ```
 void acqPopNextAndSave(string handle, int frame, int channel, int slice, int position, string imageMeta);
+```
+### Add external image
+
+In order to support old style acquisition where the image makes the round-trip through the GUI we are allowing the application insert image into the storage. This can be also used to process images in the application level before adding them to the dataset.
+
+```
+void acqAddImage(string handle, int frame, int channel, int slice, int position, vector<unsigned char> pixels, string meta);
 ```
 
 ### Access to the data
