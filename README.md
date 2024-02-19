@@ -21,6 +21,12 @@ bool acqCloseDataset(string handle);
 ```
 After the dataset is closed, we can't add any images to it.
 
+The summaryMetadata argument (JSON) must have all the required parameters for creating the dataset (e.g. dimension extents, channel names)
+
+#### Discussion:
+* We are assuming that summaryMeta input parameter (JSON format) contains necessary information for creating the dataset, e.g. how many channels, channel names, slices, etc.
+* Implicitly that means we know in advance all dimensional aspects of the dataset we are about to acquire
+
 ### Load Dataset
 This allows us to load an existing dataset and access data through the MMCore API. Loaded datasets are immutable, any attempt to add images will fail. "Loading" the dataset does not mean that it is loaded in program memory - it just means we can gain access to it through the MMCore API.
 
@@ -62,4 +68,13 @@ BINARYDATA acqGetImagePixels(string& handle, int frame, int channel, int slice, 
 
 ## Storage Device API
 To be determined after the MMCore API is complete. The device API will mostly mirror the MMCore API, plus some calls to insert pixel data. MMCore will need to properly manage this device, e.g. wire its internal image buffers to it.
+
+Storage Device API is not visible to the application (user-client) so we will treat it as an MMCore implementation detail.
+
+# Discussion
+Nico's comments:
+* The API assumens 6D image model, maybe we should generalize to variable N dimensional model
+* The API assigns physical meaning to image dimension coordinates, maybe we can generalize to abstract dimensions. The interpretation of dimensions is then assigned by the acquisition engine
+* Consider supporting variable image dimensions during acquisition
+* Consider the case where we have multiple cameras acuiring simultaneously. Not clear if the current API supports that case.
 
