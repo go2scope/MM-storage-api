@@ -1,4 +1,6 @@
 # Storage Device for Micro-manager
+## Conceptual Block Diagram
+![alt text](./mm-python-app-2024-02-15-1225.png)
 
 ## MMCore API
 Proposed additions to the MMCore API to accomodate the new "Storage" device. All code is pseudo C++ (without unnecessary type decorations) to improve readability. Errors are handled through exceptions (not shown).
@@ -91,14 +93,4 @@ To be determined after the MMCore API is complete. The device API will mostly mi
 
 Storage Device API is not visible to the application (user-client) so we will treat it as an MMCore implementation detail.
 
-## Conceptual Block Diagram
-![alt text](./mm-python-app-2024-02-15-1225.png)
-
-
-# Discussion
-Nico's comments:
-* The API assumens 6D image model, maybe we should generalize to variable N dimensional model
-* The API assigns physical meaning to image dimension coordinates, maybe we can generalize to abstract dimensions. The interpretation of dimensions is then assigned by the acquisition engine
-* Consider supporting variable image dimensions during acquisition
-* Consider the case where we have multiple cameras acuiring simultaneously. Not clear if the current API supports that case.
 
