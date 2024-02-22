@@ -25,12 +25,11 @@ string acqCreateDataset(string path, string name, int numberOfDimensions, string
 We can *optionally* add metadata to each dimension.
 
 ```
-void configureDimension(string handle, int coordinate, string name, string meaning)
+void configureDimension(string handle, int dimension, int coordinate, string name)
 ```
 - handle: dataset handle
 - coordinate: integer pointing to the coordinate we are configuring
 - name: name we want to assign to a coordinate, such as channel name, position name, or anything else. We can leave the name empty.
-- meaning: we can assign a physical meaning to the coordinate according to a limited set of pre-defined terms: Z, T, C, etc. This can also be empty, but in that case, some file formats may automatically infer the meaning from the order of coordinates.
 
 
 ### Close Dataset
@@ -75,7 +74,7 @@ void acqPopNextAndSave(string handle, int frame, int channel, int slice, int pos
 ```
 ### Add external image
 
-In order to support old-style acquisition where the image makes the round-trip through the GUI, we are allowing the application to insert an image into the storage. This can also be used to process images at the application level before adding them to the dataset.
+To support old-style acquisition where the image makes the round-trip through the GUI, we are allowing the application to insert an image into the storage. This mode can be also utilized to process images at the application level before adding them to the dataset.
 
 ```
 void acqAddImage(string handle, int frame, int channel, int slice, int position, vector<unsigned char> pixels, string imageMeta);
