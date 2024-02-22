@@ -10,7 +10,17 @@ There are three important points about this API:
 - all storage functions and any access to the File System are hidden behind the MMCore API, and images do not need to cross the API
 - The MMCore is using StorageDevice - a new type of MMDevice that handles the reading and writing of datasets. That way, it is easy to add new file formats as new devices (e.g., the same principle as adding a new camera).
 
-The proposed API only illustrates the principle and will probably need some additional methods to be useful.
+The proposed API only illustrates the principle and will probably need some additional methods to be useful. This API assumes that only one storage device is active in MMCore at one time, and all API calls implicitly refer to the active device.
+
+### Get Storage Device
+```
+string getStorageDevice();
+```
+
+### Set Storage Device
+```
+void setStorageDevice(string deviceName);
+```
 
 ### Create Dataset
 ``` 
@@ -59,35 +69,32 @@ vector<string> acqListDatasets(string path);
 ```
 
 ### Snap and Save
-Performs a single image acquisition and sends the image to the Storage device. Metadata is optional, as the mandatory meta will be auto-generated. Coordinate data item is also optional. For example, this variable can assign the depth value to the Z coordinate. That would enable some rudimentary sorting features along coordinates.
-
 ```
-void acqSnapAndSave(string handle, int frame, int channel, int slice, int position, string imageMeta, string coordDataItem);
+void acqSnapAndSave(string handle, int frame, vector<int> coordinates, string imageMeta);
 ```
+Performs a single image acquisition and sends the image to the Storage device. Metadata is optional, as the mandatory meta will be auto-generated. The size of the coordinate array must match the previously declared number of dimensions. The image does not leave the MMCore, as the image buffer is piped directly to the Storage Device immediately after the acquisition. After sending the image to the storage, we can still fetch the acquired image and send it to the display if we want to by using the existing getImage() call.
 
 ### Pop and Save
-Pops the next image from the queue and sends it to the Storage device. Metadata is optional, as the mandatory meta will be auto-generated.
+```
+void acqPopNextAndSave(string handle, vector<int> coordinates, string imageMeta);
+```
+Pops the next image from the queue and sends it to the Storage device. Metadata is optional, as the mandatory meta will be auto-generated. Displaying images during sequence acquisition is now more challenging than before, as the popped image is removed from the queue. The problem can be solved by additional caching of the latest popped image inside the MMCore.
 
-```
-void acqPopNextAndSave(string handle, int frame, int channel, int slice, int position, string imageMeta);
-```
 ### Add external image
-
-To support old-style acquisition where the image makes the round-trip through the GUI, we are allowing the application to insert an image into the storage. This mode can be also utilized to process images at the application level before adding them to the dataset.
-
 ```
-void acqAddImage(string handle, int frame, int channel, int slice, int position, vector<unsigned char> pixels, string imageMeta);
+void acqAddImage(string handle, vector<unsigned char> coordinates, string imageMeta);
 ```
+We allow the application to insert an image into the storage to support old-style acquisition where the image makes the round-trip through the GUI. This mode can also be utilized to process images at the application level before adding them to the dataset.
 
 ### Access to the data
 ```
 string acqGetSummaryMeta(string handle);
-string acqGetImageMeta(string handle, int frame, int channel, int slice, int position);
-BINARYDATA acqGetImagePixels(string& handle, int frame, int channel, int slice, int position, int size);
+string acqGetImageMeta(string handle, vector<unsigned char> coordinates);
+vector<unsigned char> acqGetImagePixels(string handle, vector<unsigned char> coordinates);
 ```
 
 ## Storage Device API
-This will be determined after the MMCore API is complete. The device API will mostly mirror the MMCore API, plus some calls to insert pixel data. MMCore will need to manage this device properly, e.g. wire its internal image buffers to it.
+This will be determined after the MMCore API is complete. The device API will mostly mirror the MMCore API, plus some calls to insert pixel data. MMCore must treat the storage device appropriately to provide efficient data transfers behind the API.
 
 Storage Device API is not visible to the application (user-client), so we will treat it as an MMCore implementation detail.
 
