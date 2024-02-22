@@ -3,7 +3,7 @@
 ![alt text](./mm-python-app-2024-02-15-1225.png)
 
 ## MMCore API
-Proposed additions to the MMCore API to accomodate the new "Storage" device. To improve readability, all code is pseudo C++ (without unnecessary type decorations). Errors are handled through exceptions (not shown).
+We propose to extend the MMCore API to accomodate the new "Storage" device. To improve readability, all code is pseudo C++ (without unnecessary type decorations). Errors are handled through exceptions (not shown).
 
 There are three important points about this API:
 - allows the acquisition engine or controlling script to be *outside* of MMCore. 
@@ -13,23 +13,22 @@ There are three important points about this API:
 The proposed API only illustrates the principle and will probably need some additional methods to be useful.
 
 ### Create Dataset
-Create a new dataset. If the resulting path exists, this method will fail. The number of dimensions must be specified at the time of creation, and the call will fail if the current storage device does not support the requested dimensionality.
-
 ``` 
 string acqCreateDataset(string path, string name, int numberOfDimensions, string customMeta);
 ```
+Create a new dataset. If the resulting path exists, this method will fail. The number of dimensions must be specified at the time of creation, and the call will fail if the current storage device does not support the requested dimensionality.
 
-**acqCreateDataset()** returns the string handle (UUID) to the opened dataset. This handle is then used in all other API calls to refer to that dataset. Multiple datasets can be opened at the same time.
+**acqCreateDataset()** returns the string handle (UUID) to the opened dataset. This handle is subsequently used in all other API calls to refer to that dataset. Multiple datasets can be opened at the same time.
 
-### Configure Dataset
-We can *optionally* add metadata to each dimension.
-
+### Configure Dimensions
+We can *optionally* configure each dimension with a name and physical meaning
 ```
-void configureDimension(string handle, int dimension, int coordinate, string name)
+void configureDimension(string handle, int dimension, string name, string meaning);
 ```
 - handle: dataset handle
-- coordinate: integer pointing to the coordinate we are configuring
-- name: name we want to assign to a coordinate, such as channel name, position name, or anything else. We can leave the name empty.
+- dimension: integer pointing to the dimension we are configuring
+- name: name we want to assign to a dimension, e.g. "slice" or "channel"
+- meaning: physical meaning of the dimension using a commonly adopted (OME?) nomenclature, e.g. Z, C, T, etc.
 
 
 ### Close Dataset
