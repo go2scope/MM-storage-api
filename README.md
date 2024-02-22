@@ -82,15 +82,15 @@ Pops the next image from the queue and sends it to the Storage device. Metadata 
 
 ### Add external image
 ```
-void acqAddImage(string handle, vector<unsigned char> coordinates, string imageMeta);
+void acqAddImage(string handle, vector<int> coordinates, string imageMeta);
 ```
 We allow the application to insert an image into the storage to support old-style acquisition where the image makes the round-trip through the GUI. This mode can also be utilized to process images at the application level before adding them to the dataset.
 
 ### Access to the data
 ```
 string acqGetSummaryMeta(string handle);
-string acqGetImageMeta(string handle, vector<unsigned char> coordinates);
-vector<unsigned char> acqGetImagePixels(string handle, vector<unsigned char> coordinates);
+string acqGetImageMeta(string handle, vector<int> coordinates);
+vector<unsigned char> acqGetImagePixels(string handle, vector<int> coordinates);
 ```
 
 ## Storage Device API
