@@ -3,7 +3,7 @@
 ## Conceptual Block Diagram of the Existing MM Java App
 ![alt text](./mm-existing.png)
 
-## Conceptual Block Diagram of the Python App
+## Conceptual Block Diagram of the New Python App
 ![alt text](./mm-python-app-2024-02-15-1225.png)
 
 The drawing shows the Python application as the controlling process, but it can be used in any language supported by the available MMCore wrappers.
