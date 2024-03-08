@@ -1,8 +1,16 @@
 # Storage Device for Micro-manager
-## Conceptual Block Diagram
+
+## Conceptual Block Diagram of the Existing MM Java App
+![alt text](./mm-existing.png)
+
+## Conceptual Block Diagram of the Python App
 ![alt text](./mm-python-app-2024-02-15-1225.png)
 
 The drawing shows the Python application as the controlling process, but it can be used in any language supported by the available MMCore wrappers.
+
+## Conceptual Block Diagram of the New MM Java App
+![alt text](./mm-new.png)
+
 
 ## MMCore API
 We propose to extend the MMCore API to accommodate the new "Storage" device. All code is in pseudo C++ (without unnecessary type decorations) to improve readability. Errors are handled through exceptions (not shown).
